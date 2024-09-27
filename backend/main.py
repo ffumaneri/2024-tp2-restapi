@@ -3,12 +3,13 @@ from pytest import Session
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Path, status
+from fastapi import Depends, FastAPI, HTTPException, Path, Query, status
 from pydantic import BaseModel, Field
 
 app = FastAPI()
 
-## DB
+# region DB
+
 SQLALCHEMY_DB_URL = SQLALCHEMY_DB_URL="postgresql+psycopg2://postgres:aslan.olivia@localhost:5432/utn-lab-tp-2"
 
 class Database():
@@ -41,7 +42,9 @@ class AutoBd(ORMBase):
 
 db_instance.create_all()
 
-## FastApi
+# endregion
+
+# region FastApi
 
 class AutoSinId(BaseModel):
     marca: str = Field(..., description="Marca del Auto", max_length=50)
@@ -49,11 +52,6 @@ class AutoSinId(BaseModel):
 
 class Auto(AutoSinId):
     id: int
-
-@app.get("/")
-def read_root():
-    return "Hola desde Fast Api"
-
 
 @app.get("/auto/all")
 def get_autos(db: Session = Depends(db_instance.get_db)):
@@ -76,7 +74,7 @@ def add_auto(autos: List[AutoSinId], db: Session = Depends(db_instance.get_db)):
         db.add(auto_db)
     
     db.commit()
-    return {"code": "funciona"}
+    return {"code": "Funciona"}
 
 @app.delete("/auto/{id}")
 def delete_auto(id: Annotated[int, Path(description="Id del auto a eliminar")], db: Session = Depends(db_instance.get_db)):
@@ -86,8 +84,24 @@ def delete_auto(id: Annotated[int, Path(description="Id del auto a eliminar")], 
     
     db.delete(auto)
     db.commit()
-    
-    return {"code": "eliminado"}
+
+    return {"code": "Auto Eliminado"}
+
+@app.patch("/auto/{id}")
+def update_auto(data: AutoSinId, id: Annotated[int, Path(description="Id del auto a modificar")], db: Session = Depends(db_instance.get_db)):
+    autoAModificar = db.query(AutoBd).filter(AutoBd.id == id).first()
+    autoModificado = data.model_dump(exclude_unset=True)
+    if not autoAModificar:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No se encontró un auto que coincida con el id {id}")
+
+    for key, value in autoModificado.items():
+        setattr(autoAModificar, key, value)
+
+    db.commit()   
+
+    return {"code": "Auto modificado"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=5000)
+
+# endregion
