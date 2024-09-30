@@ -23,11 +23,9 @@ autos = [
 
 
 
-@app.post("/auto", response_model=Auto)
-def agregarAuto(nuevoAuto:Auto):
-    autos.append(nuevoAuto)
-    return{"mesage":"Auto agregado","Nuevo auto":nuevoAuto}
-
+@app.get("/")
+def raiz():
+    return{"TP2"}
 
 
 
@@ -47,11 +45,16 @@ def getAuto(idAuto: int):
 
 
 
-
-
 @app.get("/autos/",response_model=list[Auto])
 def getAllAutos():
     return autos
+
+
+
+@app.post("/auto", response_model=Auto)
+def agregarAuto(nuevoAuto:Auto):
+    autos.append(nuevoAuto)
+    return{"mesage":"Auto agregado","Nuevo auto":nuevoAuto}
 
 
 
@@ -70,7 +73,6 @@ def deleteAuto(autoId: int):
 
 
 
-
 @app.patch("/auto/{id}", response_model=AutoSinId)
 def actualizarAuto(idAuto:int,autoAct:AutoSinId):
     for auto in autos:
@@ -79,4 +81,3 @@ def actualizarAuto(idAuto:int,autoAct:AutoSinId):
             auto["marca"] = autoAct.marca
             return {"mensaje": "Auto actualizado", "auto:":autoAct}
     raise HTTPException(400, detail="id no encontrado")
-
