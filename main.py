@@ -29,10 +29,10 @@ async def get_all():
 
 @app.get("/auto/{id}", response_model=AutoModel)
 async def get_auto(id: int):
-    if (id) < len(autos):
-        return autos[id]
-    raise HTTPException(status_code=404, detail="Car not found")
-
+        unAuto = next((auto for auto in autos if auto["auto_id"] == id),None)
+        if not unAuto:
+            raise HTTPException(status_code=404, detail="Car not found")
+        return unAuto
 
 @app.post("/auto/")
 async def post_auto(unAuto: AutoModel):
