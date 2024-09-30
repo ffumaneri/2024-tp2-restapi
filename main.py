@@ -4,7 +4,6 @@ from pydantic import BaseModel
 
 app=FastAPI()
 
-#Para PATCH
 class AutoSinId(BaseModel):
     marca: Optional[str]=None
     modelo: Optional[str]=None
@@ -24,7 +23,7 @@ autos = [
 
 
 
-@app.post("/auto")
+@app.post("/auto", response_model=Auto)
 def agregarAuto(nuevoAuto:Auto):
     autos.append(nuevoAuto)
     return{"mesage":"Auto agregado","Nuevo auto":nuevoAuto}
@@ -32,7 +31,7 @@ def agregarAuto(nuevoAuto:Auto):
 
 
 
-@app.get("/auto/{id}")
+@app.get("/auto/{id}", response_model=Auto)
 def getAuto(idAuto: int):
     buscado = None
     
@@ -52,11 +51,11 @@ def getAuto(idAuto: int):
 
 @app.get("/autos/",response_model=list[Auto])
 def getAllAutos():
-    return [Auto(**auto) for auto in autos]
+    return autos
 
 
 
-@app.delete("/auto/{id}")
+@app.delete("/auto/{id}", response_model=Auto)
 def deleteAuto(autoId: int):
     buscado=None
     for x in autos:
@@ -78,6 +77,6 @@ def actualizarAuto(idAuto:int,autoAct:AutoSinId):
         if auto["id"]==idAuto:
             auto["modelo"] = autoAct.modelo
             auto["marca"] = autoAct.marca
-            return {"mensaje": "Auto actualizado"}
+            return {"mensaje": "Auto actualizado", "auto:":autoAct}
     raise HTTPException(400, detail="id no encontrado")
 
