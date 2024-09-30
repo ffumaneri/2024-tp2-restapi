@@ -19,7 +19,7 @@ autos = [
 
 @app.get("/")
 async def root():
-    return {"TP2": "Active"}
+    return "TP 2"
 
 
 @app.get("/auto/ALL", response_model=list[AutoModel])
@@ -39,7 +39,7 @@ async def post_auto(unAuto: AutoModel):
     try:
         if any(unAutoExistente["auto_id"] == unAuto.auto_id for unAutoExistente in autos):
             raise ValueError("Id auto already exists!")
-        autos.append(unAuto.dict())
+        autos.append(unAuto.model_dump())
         return {"Message": f"| {unAuto} | was appended to the list!"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e).split("\n"))
@@ -62,8 +62,12 @@ async def patch_auto(id: int, unAuto: AutoModel):
         auto_existente = next((auto for auto in autos if auto['auto_id'] == id), None)
         if not auto_existente:
             raise HTTPException(status_code=404, detail=f"Auto con ID {id} no encontrado.")
+        if auto_existente["auto_id"] != unAuto.auto_id:
+            raise HTTPException(status_code=402, detail="Debe ser el mismo ID")
         autos.remove(auto_existente)
-        autos.append(unAuto.dict())
+        if not any(auto["auto_id"] == unAuto.auto_id for auto in autos):
+            raise HTTPException(status_code=404,detail="No debe tener un ID existente")
+        autos.append(unAuto.model_dump())
         return unAuto
     except Exception as e:
         raise HTTPException(status_code=405, detail=str(e).split("\n"))
