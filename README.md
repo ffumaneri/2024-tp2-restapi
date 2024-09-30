@@ -26,9 +26,8 @@ Los datos se garabarán en una arreglo en memoria. Tendrá el siguiente formato:
 
 ```
 [
-{"id": 1, "marca":"Ford", "modelo": "Mondeo"},
+{"id": 0, "marca":"Ford", "modelo": "Mondeo"},
 {"id": 1, "marca":"Fiat", "modelo": "Uno"},
-{"id": 1, "marca":"Renault", "modelo": "Sandero"},
+{"id": 2, "marca":"Renault", "modelo": "Sandero"},
 ]
 ```
-
