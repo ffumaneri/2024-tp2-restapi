@@ -17,41 +17,40 @@ autos = [
     {"id": 3, "marca": "Renault", "modelo": "Sandero"},
 ]
 
-# Lista de todos los autos
 @app.get("/auto/ALL", response_model=List[Auto])
 def obtener_autos():
     return autos
 
-# Obtener un auto por ID
+
 @app.get("/auto/{auto_id}", response_model=Auto)
 def obtener_auto(auto_id: int):
     for auto in autos:
         if auto["id"] == auto_id:  
             return auto
-    raise HTTPException(status_code=404, detail="Auto no encontrado.")
+    raise HTTPException(status_code=404, detail="Auto no fue encontrado, ingrese un ID valido.")
 
-# Crear un nuevo auto
+
 @app.post("/auto", response_model=Auto)
 def crear_auto(auto: Auto):
     for auto_db in autos:
         if auto_db["id"] == auto.id:
-            raise HTTPException(status_code=400, detail="El auto ya existe.")
+            raise HTTPException(status_code=400, detail="El auto ya existe, cree uno nuevo que no exista.")
     autos.append(auto.dict())  
     return auto
 
-# Para actualizar un auto por ID
+
 @app.put("/auto/{auto_id}", response_model=Auto)
 def actualizar_auto(auto_id: int, auto_actualizado: Auto):
     for index, auto in enumerate(autos):
         if auto["id"] == auto_id: 
             autos[index] = auto_actualizado.dict() 
             return auto_actualizado
-    raise HTTPException(status_code=404, detail="Auto no encontrado.")
+    raise HTTPException(status_code=404, detail="Auto no encontrado, ingrese un ID valido.")
 
-# Para eliminar un auto por ID
+
 @app.delete("/auto/{auto_id}", response_model=Auto)
 def eliminar_auto(auto_id: int):
     for index, auto in enumerate(autos):
         if auto["id"] == auto_id: 
             return autos.pop(index)
-    raise HTTPException(status_code=404, detail="Auto no encontrado.")
+    raise HTTPException(status_code=404, detail="Auto no encontrado, ingrese un ID existente para eliminarlo.")
