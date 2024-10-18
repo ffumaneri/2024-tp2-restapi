@@ -3,7 +3,7 @@ from pydantic import BaseModel
  
 app = FastAPI()
 
-class AutoModel(BaseModel):
+class Autos(BaseModel):
     id: int
     marca: str
     modelo: str
@@ -15,46 +15,46 @@ autos = [
     {"id": 3, "marca":"Audi", "modelo": "A4"},
 ]
 
-@app.get("/") 
-async def root():
-    return {"hola"}
+@app.post("/auto", response_model=Autos)
+def crear_auto(unAuto : Autos):
+    for a in autos:
+        if a["id"] == unAuto.id:
+            raise HTTPException(status_code=400, detail="ID ya existe")
+    autos.append(unAuto.dict())
+    return unAuto
 
-
-@app.get("/auto/ALL" , response_model=list[AutoModel])
+@app.get("/auto/ALL" , response_model=list[Autos])
 def get_autos():
     return autos
 
-
-@app.get("/auto/{id}" , response_model=AutoModel)
-async def get_auto(id: int):
-    existe_auto = any(auto["id"] == id for auto in autos)
-    if existe_auto:
-        return autos[id]
-    else:
-        raise HTTPException(status_code=404, detail=f"Auto con id: {id} no encontrado")
+@app.get("/auto/{id}", response_model= Autos)
+def get_auto(id: int):
+    for auto in autos:
+        if auto["id"] == id:
+            return auto
+    raise HTTPException(status_code=404, detail=f"Auto con id: {id} no encontrado")
     
 
 @app.delete("/auto/{id}")
-async def delete_auto(id: int): 
-    existe_auto = any(auto["id"] == id for auto in autos)
-    if existe_auto: 
-        autos.pop(id)
-    else:
-        raise HTTPException(status_code=404, detail=f"El elemento con id {id}, no está en la lista ")
-   
+def delete_auto(id: int):
+    for index, auto in enumerate(autos):
+        if auto["id"] == id:
+            autos.pop(index)
+            return {f"Auto con id {id} ha sido eliminado"}
+    raise HTTPException(status_code=404, detail=f"El auto con id {id} no está en la lista")
 
-@app.patch("/auto/{id}", response_model=AutoModel)
-async def patch_auto(id: int, unAuto: AutoModel):
+@app.patch("/auto/{id}", response_model=Autos)
+def patch_auto(id: int, unAuto: Autos):
       existe_auto = any(auto["id"] == id for auto in autos)
       if existe_auto:
            autos[id] = unAuto
-           return {"mensaje": f"Se actualizo el elemento con id {id} - Modelo: { unAuto.modelo}"}
+           return {
+                "mensaje": "El auto ha sido actualizado correctamente",
+                "auto_actualizado": unAuto
+            }
       else:
          raise HTTPException(status_code=404, detail="Auto no encontrado")  
       
       
-@app.post("/auto", response_model=AutoModel)
-async def post_auto( unAuto: AutoModel):
-    id = len(autos)
-    autos.append({"id": id, "marca": unAuto.marca, "modelo": unAuto.modelo})
+
 
