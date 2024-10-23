@@ -1,0 +1,124 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #444;
+    margin-top: 20px;
+    border-bottom: 2px solid rgba(255, 105, 180, 0.7); /* Rosa */
+    padding-bottom: 10px;
+}
+
+form {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    max-width: 50%;
+}
+
+input[type="number"],
+input[type="text"],
+button {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid rgba(204, 204, 204, 0.8);
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: rgba(255, 105, 180, 1);
+    box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+}
+
+button {
+    background-color: rgba(255, 87, 34, 1); /* Naranja */
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: rgba(255, 152, 0, 1); /* Naranja más claro */
+    transform: scale(1.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid rgba(221, 221, 221, 1);
+}
+
+th {
+    background-color: rgba(63, 81, 181, 1); /* Azul */
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: left;
+}
+
+.delete-button {
+    background-color: rgba(244, 67, 54, 1); /* Rojo */
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.delete-button:hover {
+    background-color: rgba(211, 47, 47, 1); /* Rojo más oscuro */
+    transform: scale(1.05);
+}
+
+#auto-details {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgba(63, 81, 181, 0.1); /* Azul claro */
+    border: 1px solid rgba(63, 81, 181, 1);
+    border-radius: 5px;
+}
+
+.success-message {
+    background-color: rgba(76, 175, 80, 0.3); /* Verde claro */
+    color: #155724;
+    border: 1px solid rgba(76, 175, 80, 1);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.error-message {
+    background-color: rgba(244, 67, 54, 0.3); /* Rojo claro */
+    color: #721c24;
+    border: 1px solid rgba(244, 67, 54, 1);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
