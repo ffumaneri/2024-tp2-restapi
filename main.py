@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles  # Importa StaticFiles
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,9 +27,6 @@ class Auto(BaseModel):
 autos_db: List[Auto] = [
     Auto(id=1, marca="Ford", modelo="Falcon", año=1995, puertas=5),
 ]
-
-# Monta la carpeta estática donde están tus archivos CSS y HTML
-app.mount("/static", StaticFiles(directory="."), name="static")
 
 # Ruta principal para servir el HTML
 @app.get("/", response_class=HTMLResponse)
