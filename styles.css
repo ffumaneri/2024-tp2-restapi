@@ -24,7 +24,10 @@ form {
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
-    max-width: 50%;
+    max-width: 400px; /* Cambia esto si necesitas un ancho diferente */
+    display: flex; /* Añadido para centrar elementos */
+    flex-direction: column; /* Coloca elementos en columna */
+    align-items: center; /* Centra los elementos */
 }
 
 input[type="number"],
@@ -54,6 +57,7 @@ button {
     font-size: 14px;
     transition: background-color 0.3s, transform 0.2s;
     border-radius: 5px;
+    margin: 8px 0; /* Asegúrate de que haya espacio entre los botones */
 }
 
 button:hover {
